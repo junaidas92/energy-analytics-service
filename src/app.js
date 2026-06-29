@@ -9,8 +9,11 @@ app.use(express.json());
 const energyRoutes = require('./routes/energy.routes');
 const errorHandler = require('./middlewares/error.middleware');
 const logger = require('./utils/logger');
+const limiter = require('./middlewares/rateLimit.middleware');
+
 
 app.use(logger);
+app.use(limiter);
 
 app.use('/api/energy', energyRoutes);
 
