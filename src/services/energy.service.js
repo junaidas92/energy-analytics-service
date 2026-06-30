@@ -1,5 +1,5 @@
-const energyMock = require('../mock/energy.mock');
-
+//const energyMock = require('../mock/energy.mock');
+const energyRepository = require('../repository/energy.repository');
 const redis = require('../cache/redis');
 
 const CACHE_TTL = 60; 
@@ -25,7 +25,9 @@ const getEnergyConsumption = async(machineIds, startDate, endDate) => {
     }
 
     console.log('Cache miss:',  cacheKey)
-    const data =  energyMock.getConsumptionData(machineIds, startDate, endDate)
+    //const data =  energyMock.getConsumptionData(machineIds, startDate, endDate)
+    const data =  energyRepository.getConsumptionData(machineIds, startDate, endDate);
+
 
     await redis.setex(cacheKey, CACHE_TTL, JSON.stringify(data));
 
@@ -48,7 +50,8 @@ const getMachineEnergyData = async(machineId) => {
     }
 
     console.log('Cache miss: ', cacheKey);
-    const data = energyMock.getMachineData(machineId);
+    //const data = energyMock.getMachineData(machineId);
+    const data = energyRepository.getMachineEnergyData(machineId);
     await redis.setex(cacheKey, CACHE_TTL, JSON.stringify(data));
 
     return data;
